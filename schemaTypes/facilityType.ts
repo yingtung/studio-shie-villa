@@ -1,8 +1,8 @@
 import {defineField, defineType} from 'sanity'
 
-const roomType = defineType({
-  name: 'room',
-  title: 'Room',
+const facilityType = defineType({
+  name: 'facility',
+  title: 'Facility',
   type: 'document',
   fields: [
     defineField({
@@ -17,16 +17,15 @@ const roomType = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
-      name: 'images',
-      type: 'array',
-      of: [{type: 'image'}],
+      name: 'image',
+      type: 'image',
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'description',
-      type: 'array',
-      of: [{type: 'block'}],
+      type: 'string',
     }),
   ],
 })
 
-export default roomType
+export default facilityType
