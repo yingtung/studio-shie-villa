@@ -1,8 +1,9 @@
 import {defineField, defineType} from 'sanity'
+import isUniqueAcrossAllDocuments from '../lib/isUniqueAcrossAllDocuments'
 
 const roomType = defineType({
   name: 'room',
-  title: 'Room',
+  title: '房間',
   type: 'document',
   fields: [
     defineField({
@@ -15,7 +16,7 @@ const roomType = defineType({
       title:"房間編號",
       name: 'slug',
       type: 'slug',
-      options: {source: 'title'},
+      options: {source: 'title',maxLength: 96, isUnique: isUniqueAcrossAllDocuments},
       validation: (rule) => [
         rule.required(),
       ],

@@ -27,7 +27,7 @@ const isUniqueOrder = async (order:number, context:ValidationContext) => {
 
 const facilityType = defineType({
   name: 'facility',
-  title: 'Facility',
+  title: '民宿設施',
   type: 'document',
   fields: [
     defineField({

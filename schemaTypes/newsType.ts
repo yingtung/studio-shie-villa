@@ -4,7 +4,7 @@ import isUniqueAcrossAllDocuments from '../lib/isUniqueAcrossAllDocuments'
 
 const newsType = defineType({
   name: 'news',
-  title: 'News',
+  title: '最新消息',
   type: 'document',
   fields: [
     defineField({
