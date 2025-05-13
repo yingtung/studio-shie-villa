@@ -11,6 +11,7 @@ const newsType = defineType({
       name: 'title',
       title:"標題",
       type: 'string',
+      description: '文章標題',
       validation: (rule) => rule.required(),
     }),
     defineField({
@@ -35,8 +36,8 @@ const newsType = defineType({
         {
           name: 'alt',
           type: 'string',
-          title: 'Alternative text',
-          description: '用於圖片無法顯示時的替代文字，以及 SEO 和可訪問性',
+          title: '圖片替代文字',
+          description: '只有當圖片無法顯示時才會顯示的替代文字，目的是為了提高 SEO 和可訪問性',
         },
       ],
       validation: (Rule) => Rule.required(),
@@ -91,8 +92,8 @@ const newsType = defineType({
             {
               name: 'alt',
               type: 'string',
-              title: 'Alternative text',
-              description: '用於圖片無法顯示時的替代文字，以及 SEO 和可訪問性',
+              title: '圖片替代文字',
+              description: '只有當圖片無法顯示時才會顯示的替代文字，目的是為了提高 SEO 和可訪問性',
             },
           ],
         },
@@ -102,6 +103,7 @@ const newsType = defineType({
       name: 'publishedAt',
       title: '發佈時間',
       type: 'datetime',
+      description: '網頁上會根據發布時間的先後順序做排序，最新的會放在最前面',
       options: {
         dateFormat: 'YYYY-MM-DD',
         timeFormat: 'HH:mm',
