@@ -72,6 +72,13 @@ const facilityType = defineType({
           })
         ],
     }),
+    defineField({
+      name: 'hidden',
+      title: '是否隱藏',
+      type: 'boolean',
+      description: '是否隱藏顯示在網頁上，如果設定true，就不會在網頁上顯示',
+      initialValue: false
+    }),
   ],
 })
 
