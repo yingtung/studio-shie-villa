@@ -115,7 +115,7 @@ const newsType = defineType({
       name: 'excerpt',
       title: '文章摘要',
       type: 'text',
-      description: '文章的摘要，用於列表頁面和 SEO',
+      description: '文章的摘要，用於列表頁面，字數約四十以內',
     }),
     defineField({
       name: 'hidden',
