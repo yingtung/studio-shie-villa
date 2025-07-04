@@ -1,0 +1,62 @@
+name: Sanity Dataset Backup to S3
+
+on:
+  schedule:
+    # 每天下午 5 點 UTC 執行 (台灣時間為上午 1 點)
+    - cron: '0 17 * * *'
+  workflow_dispatch: # 允許手動觸發 workflow
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest # 執行環境
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4 # 拉取你的專案程式碼
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18' # 使用 Node.js 18 或更高版本
+
+      - name: Install Sanity CLI
+        run: npm install -g @sanity/cli # 全局安裝 Sanity CLI
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Run Sanity Dataset Export
+        id: sanity_export
+        env:
+          SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }} # 傳遞 API Token 作為環境變數
+          SANITY_PROJECT_ID: ${{ secrets.SANITY_PROJECT_ID }}
+          SANITY_DATASET: ${{ secrets.SANITY_DATASET }}
+        run: |
+          export TZ="Asia/Taipei"; TIMESTAMP=$(date +%Y%m%d%H%M%S)-CST
+          BACKUP_FILE="${{ env.SANITY_DATASET }}-backup-${TIMESTAMP}.tar.gz"
+          
+          # 執行備份命令
+          sanity dataset export ${{ env.SANITY_DATASET }} "${BACKUP_FILE}" --raw
+          
+          # 將備份檔案路徑儲存為輸出，以便後續步驟使用
+          echo "backup_file_name=${BACKUP_FILE}" >> $GITHUB_OUTPUT
+
+      - name: Upload Backup to S3
+        uses: actions/upload-artifact@v4 # 也可以先上傳到 artifact 方便除錯
+        with:
+          name: sanity-backup-${{ steps.sanity_export.outputs.backup_file_name }}
+          path: ${{ steps.sanity_export.outputs.backup_file_name }}
+          retention-days: 1 # 暫時保留，也可以不保留
+
+      - name: Upload to S3
+        run: |
+          aws s3 cp "${{ steps.sanity_export.outputs.backup_file_name }}" "s3://${{ secrets.S3_BUCKET_NAME }}/sanity-backups/${{ steps.sanity_export.outputs.backup_file_name }}"
+          echo "Backup uploaded to S3."
+
+      - name: Clean up local backup file
+        if: always() # 無論前面成功與否都執行
+        run: rm -f ${{ steps.sanity_export.outputs.backup_file_name }}
