@@ -36,6 +36,7 @@ jobs:
           SANITY_PROJECT_ID: ${{ secrets.SANITY_PROJECT_ID }}
           SANITY_DATASET: ${{ secrets.SANITY_DATASET }}
         run: |
+          npm install --production
           export TZ="Asia/Taipei"; TIMESTAMP=$(date +%Y%m%d%H%M%S)-CST
           BACKUP_FILE="${{ env.SANITY_DATASET }}-backup-${TIMESTAMP}.tar.gz"
           
