@@ -15,11 +15,11 @@
     "sanity"
   ],
   "dependencies": {
-    "@sanity/vision": "^3.85.1",
+    "@sanity/vision": "^3.95.0",
     "dotenv": "^16.5.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "sanity": "^3.85.1",
+    "sanity": "^3.95.0",
     "sanity-plugin-simpler-color-input": "^3.0.1",
     "styled-components": "^6.1.15"
   },
